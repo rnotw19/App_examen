@@ -5,6 +5,6 @@ export NVM_DIR="$HOME/.nvm"
 nvm install 16
 sudo yum install -y git
 git clone https://github.com/meth-meth-method/super-mario.git
-cd super-mario
+cd super-mario/
 npm install
 npm start
