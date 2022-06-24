@@ -16,4 +16,37 @@ resource "aws_lb" "test" {
      }
 
 }
+
+#Autoscaling Attachment
+resource "aws_autoscaling_attachment" "svc_asg_external2" {
+  alb_target_group_arn   = "${aws_lb_target_group.t_group.arn}"
+  autoscaling_group_name = "${aws_autoscaling_group.bar.id}"
+}
+
+resource "aws_lb_listener" "Lb_listener" {
+  load_balancer_arn = aws_lb.test.arn
+  port =80
+  protocol = "HTTP"
+  default_action{
+target_group_arn = aws_lb_target_group.t_group.arn
+type = "forward"
+  }
+}
+resource "aws_lb_target_group" "t_group" {
+    name = "tg-Appmario-ron"
+    port = 5000
+    protocol = "HTTP"
+    vpc_id=data.aws_vpc.default.id
+    
+health_check {
+  interval = 10
+  path = "/"
+  protocol = "HTTP"
+  timeout = 5
+  healthy_threshold = 5
+  unhealthy_threshold = 2
+}
+  
+}
+
   
